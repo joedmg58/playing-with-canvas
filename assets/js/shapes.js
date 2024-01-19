@@ -1,19 +1,35 @@
 class Shape {
-    constructor(position, color) {
+    constructor(position, direction, speed, color) {
         this.position = position;
+        this.direction = direction;
+        this.speed = speed;
         this.color = color;
+        this.friction = 0.003;
     }
 
     draw(ctx) {
         ctx.strokeStyle = this.color;
         ctx.fillStyle = this.color;
     }
+
+    update() {
+        this.position.x = this.position.x + this.speed * Math.cos(this.direction);
+        this.position.y = this.position.y + this.speed * Math.sin(this.direction);
+        this.speed -= this.friction;
+        if (this.speed < 0) this.speed = 0;
+    }
+
+    checkCollision(boundX, boundY) {
+        if (this.position.x >= boundX.max || this.position.x <= boundX.min || this.position.y >= boundY.max || this.position.y <= boundY.min) {
+            this.direction = this.direction + Math.PI;
+            
+        }
+    }
 }
 
 class Circle extends Shape {
-    constructor(position, color, radius) {
-        console.log(position);
-        super(position, color);
+    constructor(position, direction, speed, color, radius) {
+        super(position, direction, speed, color);
         this.radius = radius;
     }
 
@@ -24,11 +40,19 @@ class Circle extends Shape {
         ctx.closePath();
         ctx.fill();
     }
+
+    update() {
+        super.update();
+    }
+
+    checkCollision(boundX, boundY) {
+        super.checkCollision(boundX, boundY);
+    }
 }
 
 class Rectangle extends Shape {
-    constructor(position, color, w, h) {
-        super(position, color);
+    constructor(position, direction, speed, color, w, h) {
+        super(position, direction, speed, color);
         this.w = w;
         this.h = h;
     }
@@ -40,11 +64,19 @@ class Rectangle extends Shape {
         ctx.closePath();
         ctx.fill();
     }
+
+    update() {
+        super.update();
+    }
+
+    checkCollision(boundX, boundY) {
+        super.checkCollision(boundX, boundY);
+    }
 }
 
 class Triangle extends Shape {
-    constructor(position, color, side) {
-        super(position, color);
+    constructor(position, direction, speed, color, side) {
+        super(position, direction, speed, color);
         this.side = side;
     }
 
@@ -57,5 +89,13 @@ class Triangle extends Shape {
         ctx.lineTo(this.position.x + this.side * Math.cos(30 * Math.PI/180), this.position.y + this.side * Math.sin(30 * Math.PI/180));
         ctx.closePath();
         ctx.fill();
+    }
+
+    update() {
+        super.update();
+    }
+
+    checkCollision(boundX, boundY) {
+        super.checkCollision(boundX, boundY);
     }
 }

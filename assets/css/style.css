@@ -13,7 +13,24 @@ body {
     background-color: gray;
 }
 
+.mouse-position {
+    position: absolute;
+    top: 5px;
+    left: 5px;
+    display: flex;
+    color: white;
+    font-size: 2rem;
+}
+
+.x, .y {
+    padding: 10px;
+}
+
+.y {
+    margin-left: 1rem;
+}
+
 #my-canvas {
-    background-color: black;
+    background: radial-gradient(rgb(126, 115, 115), black);
     border: 3px solid red;
 }

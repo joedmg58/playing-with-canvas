@@ -1,6 +1,15 @@
 let CANVAS_WIDTH;
 let CANVAS_HEIGHT;
 
+let mouse = {
+    x: null,
+    y: null,
+    radius: null
+}
+
+let x = document.getElementsByClassName('x');
+let y = document.getElementsByClassName('y');
+
 const myCanvas = document.getElementById('my-canvas');
 const ctx = myCanvas.getContext('2d');
 setCanvasSize();
@@ -8,12 +17,19 @@ setCanvasSize();
 function setCanvasSize() {
     CANVAS_WIDTH = myCanvas.width = window.innerWidth * 0.75;
     CANVAS_HEIGHT = myCanvas.height = window.innerHeight * 0.75;
+    mouse.radius = CANVAS_HEIGHT/80 * CANVAS_WIDTH/80;
 }
 
 
 window.onresize = function() {
     setCanvasSize();
 }   
+
+window.onmousemove = function(e) {
+    mouse.x = e.x;
+    mouse.y = e.y;
+    
+}
 
 const color = new randomColor();
 const position = new randomPosition({min: 0, max: CANVAS_WIDTH}, {min: 0, max: CANVAS_HEIGHT})
@@ -25,22 +41,22 @@ let shapes = [];
 for (let i = 0; i < shapesCount; i++) {
     let shapeOption = randomPickFromArray(shapeTypes); 
     switch (shapeOption) {
-        case 'circle': shapes.push(new Circle(position.getPosition(), randomFromRange(0, 2*Math.PI), randomFromRange(2, 10), color.getColor(), randomFromRange(3, 25)));
+        case 'circle': shapes.push(new Circle(position.getPosition(), randomFromRange(0, 2*Math.PI), randomFromRange(2, 5), color.getColor(), randomFromRange(3, 25)));
                        break;
         case 'rectangle': let a = randomFromRange(3,25);
-                          shapes.push(new Rectangle(position.getPosition(), randomFromRange(0, 2*Math.PI), randomFromRange(2, 10), color.getColor(), a, a));
+                          shapes.push(new Rectangle(position.getPosition(), randomFromRange(0, 2*Math.PI), randomFromRange(2, 5), color.getColor(), a, a));
                           break;  
-        case 'triangle': shapes.push(new Triangle(position.getPosition(), randomFromRange(0, 2*Math.PI), randomFromRange(2, 10), color.getColor(), randomFromRange(3, 25)));   
+        case 'triangle': shapes.push(new Triangle(position.getPosition(), randomFromRange(0, 2*Math.PI), randomFromRange(2, 5), color.getColor(), randomFromRange(3, 25)));   
                          break;
-        case 'star':  shapes.push(new Star(position.getPosition(), randomFromRange(0, 2*Math.PI), randomFromRange(2, 10), color.getColor(), randomFromRange(3, 25)));   
+        case 'star':  shapes.push(new Star(position.getPosition(), randomFromRange(0, 2*Math.PI), randomFromRange(2, 5), color.getColor(), randomFromRange(3, 25)));   
                       break;   
-        case 'penthagon': shapes.push(new Polygon(position.getPosition(), randomFromRange(0, 2*Math.PI), randomFromRange(2,10), color.getColor(), randomFromRange(3, 25), 5));
+        case 'penthagon': shapes.push(new Polygon(position.getPosition(), randomFromRange(0, 2*Math.PI), randomFromRange(2, 5), color.getColor(), randomFromRange(3, 25), 5));
                           break;
-        case 'hexagon': shapes.push(new Polygon(position.getPosition(), randomFromRange(0, 2*Math.PI), randomFromRange(2,10), color.getColor(), randomFromRange(3, 25), 6));
+        case 'hexagon': shapes.push(new Polygon(position.getPosition(), randomFromRange(0, 2*Math.PI), randomFromRange(2, 5), color.getColor(), randomFromRange(3, 25), 6));
                           break;                  
-        case 'octagon': shapes.push(new Polygon(position.getPosition(), randomFromRange(0, 2*Math.PI), randomFromRange(2,10), color.getColor(), randomFromRange(3, 25), 8));
+        case 'octagon': shapes.push(new Polygon(position.getPosition(), randomFromRange(0, 2*Math.PI), randomFromRange(2, 5), color.getColor(), randomFromRange(3, 25), 8));
                           break;   
-        case '10': shapes.push(new Polygon(position.getPosition(), randomFromRange(0, 2*Math.PI), randomFromRange(2,10), color.getColor(), randomFromRange(3, 25), 10));
+        case '10': shapes.push(new Polygon(position.getPosition(), randomFromRange(0, 2*Math.PI), randomFromRange(2, 5), color.getColor(), randomFromRange(3, 25), 10));
                           break;                                         
     }
 }
@@ -64,9 +80,9 @@ function updateShapes(ctx) {
     }
 }
 
-function checkCollisions(boundX, boundY) {
+function checkCollisions(boundX, boundY, mouse) {
     for (let i=0; i<shapes.length; i++) {
-        shapes[i].checkCollision(boundX, boundY);
+        shapes[i].checkCollision(boundX, boundY, mouse);
     }
 }
 
@@ -90,7 +106,7 @@ function animate() {
 
         drawShapes(ctx);
         updateShapes();
-        checkCollisions({min: 0, max: CANVAS_WIDTH}, {min: 0, max:CANVAS_HEIGHT});
+        checkCollisions({min: 0, max: CANVAS_WIDTH}, {min: 0, max:CANVAS_HEIGHT}, mouse);
     }
 
 }

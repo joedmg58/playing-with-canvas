@@ -1,10 +1,11 @@
 class Shape {
-    constructor(position, direction, speed, color) {
+    constructor(position, direction, speed, color, size) {
         this.position = position;
         this.direction = direction;
         this.speed = speed;
         this.startSpeed = speed;
         this.color = color;
+        this.size = size;
         this.friction = 0.003;
         //this.audio = document.createElement('audio');
         //this.audio.src = './assets/audio/mixkit-small-hit-in-a-game-2072.wav' 
@@ -21,23 +22,37 @@ class Shape {
         this.speed -= this.friction;
         if (this.speed < 0) {
             this.speed = 0;
-            //setTimeout( this.#restartSpeed(), 10000);
         }    
 
     }
 
-    checkCollision(boundX, boundY) {
+    checkCollision(boundX, boundY, mouse) {
+        const width = boundX.max - boundX.min;
+        const height = boundY.max - boundY.min;
         let collide = false;
+        
         if (this.position.y >= boundY.max) {this.direction = 2*Math.PI - this.direction; collide = true}
         if (this.position.y <= boundY.min) {this.direction = 2*Math.PI - this.direction; collide = true}
         if (this.position.x <= boundX.min) {this.direction = Math.PI - this.direction; collide = true}
         if (this.position.x >= boundX.max) {this.direction = Math.PI - this.direction; collide = true}
-        if (collide) {
-            this.friction += 0.02;
-            //const audio = document.createElement('audio');
-            //audio.src = './assets/audio/mixkit-small-hit-in-a-game-2072.wav';
-            //audio.play();
-        }    
+
+        let dx = mouse.x - this.position.x; 
+        let dy = mouse.y - this.position.y;
+        let distance = Math.sqrt(dx * dx + dy * dy);
+        if (distance < mouse.radius + this.size) {
+            if(mouse.x < this.position.x && this.position.x < width - this.size * 10) {
+                this.position.x += 10;
+            }
+            if (mouse.x > this.position.x && this.position.x > this.size * 10) {
+                this.position.x -= 10;
+            }
+            if (mouse.y < this.position.y && this.position.y < height - this.size * 10) {
+                this.position.y += 10;
+            }
+            if (mouse.y > this.position.y && this.position.y > this.size * 10) {
+                this.position.y -= 10;
+            }
+        }
     }
 
     #restartSpeed() {
@@ -48,9 +63,9 @@ class Shape {
 }
 
 class Circle extends Shape {
-    constructor(position, direction, speed, color, radius) {
-        super(position, direction, speed, color);
-        this.radius = radius;
+    constructor(position, direction, speed, color, size) {
+        super(position, direction, speed, color, size);
+        this.radius = size;
     }
 
     draw(ctx) {
@@ -65,16 +80,16 @@ class Circle extends Shape {
         super.update();
     }
 
-    checkCollision(boundX, boundY) {
-        super.checkCollision(boundX, boundY);
+    checkCollision(boundX, boundY, mouse) {
+        super.checkCollision(boundX, boundY, mouse);
     }
 }
 
 class Rectangle extends Shape {
-    constructor(position, direction, speed, color, w, h) {
-        super(position, direction, speed, color);
-        this.w = w;
-        this.h = h;
+    constructor(position, direction, speed, color, size) {
+        super(position, direction, speed, color, size);
+        this.w = size;
+        this.h = size/2;
     }
 
     draw(ctx) {
@@ -89,15 +104,15 @@ class Rectangle extends Shape {
         super.update();
     }
 
-    checkCollision(boundX, boundY) {
-        super.checkCollision(boundX, boundY);
+    checkCollision(boundX, boundY, mouse) {
+        super.checkCollision(boundX, boundY, mouse);
     }
 }
 
 class Triangle extends Shape {
-    constructor(position, direction, speed, color, side) {
-        super(position, direction, speed, color);
-        this.side = side;
+    constructor(position, direction, speed, color, size) {
+        super(position, direction, speed, color, size);
+        this.side = size;
     }
 
     draw(ctx) {
@@ -115,15 +130,15 @@ class Triangle extends Shape {
         super.update();
     }
 
-    checkCollision(boundX, boundY) {
-        super.checkCollision(boundX, boundY);
+    checkCollision(boundX, boundY, mouse) {
+        super.checkCollision(boundX, boundY, mouse);
     }
 }
 
 class Star extends Shape {
-    constructor(position, direction, speed, color, side) {
-        super(position, direction, speed, color);
-        this.side = side;
+    constructor(position, direction, speed, color, size) {
+        super(position, direction, speed, color, size);
+        this.side = size;
     }
 
     draw(ctx) {
@@ -149,15 +164,15 @@ class Star extends Shape {
         super.update();
     }
 
-    checkCollision(boundX, boundY) {
-        super.checkCollision(boundX, boundY);
+    checkCollision(boundX, boundY, mouse) {
+        super.checkCollision(boundX, boundY, mouse);
     }
 }
 
 class Polygon extends Shape {
-    constructor(position, direction, speed, color, radius, sides) {
-        super(position, direction, speed, color);
-        this.radius = radius;
+    constructor(position, direction, speed, color, size, sides) {
+        super(position, direction, speed, color, size);
+        this.radius = size;
         this.sides = sides;
     }
 
@@ -178,8 +193,8 @@ class Polygon extends Shape {
         super.update();
     }
 
-    checkCollision(boundX, boundY) {
-        super.checkCollision(boundX, boundY);
+    checkCollision(boundX, boundY, mouse) {
+        super.checkCollision(boundX, boundY, mouse);
     }
 }
 

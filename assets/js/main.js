@@ -17,7 +17,7 @@ window.onresize = function() {
 
 const color = new randomColor();
 const position = new randomPosition({min: 0, max: CANVAS_WIDTH}, {min: 0, max: CANVAS_HEIGHT})
-const shapeTypes = ['circle', 'rectangle', 'triangle'];
+const shapeTypes = ['circle', 'rectangle', 'triangle', 'star', 'penthagon', 'hexagon', 'octagon', '10'];
 const shapesCount = 200;
 
 let shapes = [];
@@ -30,7 +30,18 @@ for (let i = 0; i < shapesCount; i++) {
         case 'rectangle': let a = randomFromRange(3,25);
                           shapes.push(new Rectangle(position.getPosition(), randomFromRange(0, 2*Math.PI), randomFromRange(2, 10), color.getColor(), a, a));
                           break;  
-        case 'triangle': shapes.push(new Triangle(position.getPosition(), randomFromRange(0, 2*Math.PI), randomFromRange(2, 10), color.getColor(), randomFromRange(3, 25)));                  
+        case 'triangle': shapes.push(new Triangle(position.getPosition(), randomFromRange(0, 2*Math.PI), randomFromRange(2, 10), color.getColor(), randomFromRange(3, 25)));   
+                         break;
+        case 'star':  shapes.push(new Star(position.getPosition(), randomFromRange(0, 2*Math.PI), randomFromRange(2, 10), color.getColor(), randomFromRange(3, 25)));   
+                      break;   
+        case 'penthagon': shapes.push(new Polygon(position.getPosition(), randomFromRange(0, 2*Math.PI), randomFromRange(2,10), color.getColor(), randomFromRange(3, 25), 5));
+                          break;
+        case 'hexagon': shapes.push(new Polygon(position.getPosition(), randomFromRange(0, 2*Math.PI), randomFromRange(2,10), color.getColor(), randomFromRange(3, 25), 6));
+                          break;                  
+        case 'octagon': shapes.push(new Polygon(position.getPosition(), randomFromRange(0, 2*Math.PI), randomFromRange(2,10), color.getColor(), randomFromRange(3, 25), 8));
+                          break;   
+        case '10': shapes.push(new Polygon(position.getPosition(), randomFromRange(0, 2*Math.PI), randomFromRange(2,10), color.getColor(), randomFromRange(3, 25), 10));
+                          break;                                         
     }
 }
 
@@ -41,8 +52,15 @@ function drawShapes(ctx) {
 }
 
 function updateShapes(ctx) {
+    var speed = 0;
     for (let i=0; i<shapes.length; i++) {
         shapes[i].update(ctx);
+        speed += shapes[i].speed;
+    }
+    if (speed === 0) {
+        for (let i=0; i<shapes.length; i++) {
+            shapes[i].speed = shapes[i].startSpeed;
+        }
     }
 }
 

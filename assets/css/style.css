@@ -8,7 +8,7 @@ body {
     overflow: hidden;
     display: flex;
     align-items: center;
-    justify-content: center;
+    justify-content: space-around;
     height: 100vh;
     background-color: gray;
 }
@@ -30,7 +30,12 @@ body {
     margin-left: 1rem;
 }
 
-#my-canvas {
+#canvas1 {
     background: radial-gradient(rgb(126, 115, 115), black);
     border: 3px solid red;
+}
+
+#canvas2 {
+    background: black;
+    border: 3px solid green;
 }

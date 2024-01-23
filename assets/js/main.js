@@ -26,15 +26,26 @@ window.onresize = function() {
 }   
 
 window.onmousemove = function(e) {
-    mouse.x = e.x;
-    mouse.y = e.y;
+    mouse.x = e.x - (window.innerWidth - CANVAS_WIDTH)/2; 
+    mouse.y = e.y - (window.innerHeight - CANVAS_HEIGHT)/2;
     
+    ctx.beginPath();
+    ctx.fillStyle = 'red';
+    ctx.arc(mouse.x, mouse.y, 3, 0, 2*Math.PI);
+    ctx.closePath();
+    ctx.fill();
+
+    ctx.beginPath();
+    ctx.strokeStyle = 'rgba(100, 100, 100, 0.18)';
+    ctx.arc(mouse.x, mouse.y, mouse.radius, 0, 2*Math.PI);
+    ctx.closePath();
+    ctx.stroke();
 }
 
 const color = new randomColor();
 const position = new randomPosition({min: 0, max: CANVAS_WIDTH}, {min: 0, max: CANVAS_HEIGHT})
 const shapeTypes = ['circle', 'rectangle', 'triangle', 'star', 'penthagon', 'hexagon', 'octagon', '10'];
-const shapesCount = 200;
+const shapesCount = 500;
 
 let shapes = [];
 

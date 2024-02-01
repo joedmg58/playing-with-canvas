@@ -12,7 +12,7 @@ class Symbol {
         this.text = this.characters.charAt(Math.floor(Math.random()*this.characters.length));
         ctx.fillStyle = '#0aff0a';
         ctx.fillText(this.text, this.x*this.fontSize, this.y*this.fontSize);
-        if (this.y * this.fontSize > this.canvasHeight) {
+        if (this.y * this.fontSize > this.canvasHeight && Math.random() > 0.98) {
             this.y = 0;
         } else {
             this.y += 1;
@@ -35,5 +35,13 @@ class Effect {
         for (let i=0; i<this.columns; i++) {
             this.symbols[i] = new Symbol(i, 0, this.fontSize, this.canvasHeight);
         }
+    }
+
+    resize(width, height) {
+        this.canvasWidth = width;
+        this.canvasHeight = height;
+        this.columns = this.canvasWidth / this.fontSize;
+        this.symbols = [];
+        this.#initialize();
     }
 }

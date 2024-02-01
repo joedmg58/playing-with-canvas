@@ -18,6 +18,8 @@ const ctx2 = canvas2.getContext('2d');
 
 setCanvasSize();
 
+const effect = new Effect(canvas2.width, canvas2.height);
+
 function setCanvasSize() {
     CANVAS_WIDTH = canvas2.width = canvas1.width = window.innerWidth * 0.45;
     CANVAS_HEIGHT = canvas2.height = canvas1.height = window.innerHeight * 0.75;
@@ -27,6 +29,7 @@ function setCanvasSize() {
 
 window.onresize = function() {
     setCanvasSize();
+    effect.resize(CANVAS_WIDTH, CANVAS_HEIGHT);
 }   
 
 // window.onmousemove = function(e) {
@@ -124,7 +127,7 @@ function connect() {
     }
 }
 
-const effect = new Effect(canvas2.width, canvas2.height);
+
 
 
 var fps = 30;
@@ -133,16 +136,39 @@ var then = Date.now();
 var interval = 1000/fps;
 var delta;
 
-function animate() {
+// function animate() {
 
-    requestAnimationFrame(animate);
+//     requestAnimationFrame(animate);
 
-    now = Date.now();
-    delta = now - then;
+//     now = Date.now();
+//     delta = now - then;
 
-    if (delta > interval) {
-        then = now - (delta % interval);
+//     if (delta > interval) {
+//         then = now - (delta % interval);
 
+//         ctx.clearRect(0, 0, CANVAS_WIDTH, CANVAS_HEIGHT);
+
+//         drawShapes(ctx);
+//         updateShapes();
+//         checkCollisions({min: 0, max: CANVAS_WIDTH}, {min: 0, max:CANVAS_HEIGHT}, mouse);
+
+
+//         ctx2.fillStyle = `rgba(0, 0, 0, 0.05)`;
+//         ctx2.fillRect(0, 0, canvas2.width, canvas2.height);
+//         ctx2.font = effect.fontSize + 'px monospace';
+//         effect.symbols.forEach(symbol => symbol.draw(ctx2));
+//     }
+
+// }
+
+let lastTime = 0;
+let timer = 0;
+
+function animate(timeStamp) {
+    const deltaTime = timeStamp - lastTime;
+    lastTime = timeStamp;
+
+    if (timer > interval) {
         ctx.clearRect(0, 0, CANVAS_WIDTH, CANVAS_HEIGHT);
 
         drawShapes(ctx);
@@ -154,11 +180,16 @@ function animate() {
         ctx2.fillRect(0, 0, canvas2.width, canvas2.height);
         ctx2.font = effect.fontSize + 'px monospace';
         effect.symbols.forEach(symbol => symbol.draw(ctx2));
+
+        timer = 0;
+    } else {
+        timer += deltaTime;
     }
 
+    requestAnimationFrame(animate);
 }
 
-animate();
+animate(0);
 
 
 
